@@ -14,7 +14,7 @@ public class ClienteService {
 	@Autowired
 	private ClienteRepository repo;
 	
-	public Cliente busca(Integer id){
+	public Cliente find(Integer id){
 		Optional<Cliente> obj = repo.findById(id);
 		
 		return obj.orElseThrow(() -> new life.senna11.cursomc.services.exceptions.ObjectNotFoundException(

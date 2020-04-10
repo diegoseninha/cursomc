@@ -14,7 +14,7 @@ public class PedidoService {
 	@Autowired
 	private PedidoRepository repo;
 	
-	public Pedido busca(Integer id){
+	public Pedido find(Integer id){
 		Optional<Pedido> obj = repo.findById(id);
 		
 		return obj.orElseThrow(() -> new life.senna11.cursomc.services.exceptions.ObjectNotFoundException(
