@@ -1,5 +1,6 @@
 package life.senna11.cursomc.resources;
 
+import java.net.URI;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -14,9 +15,13 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
+import life.senna11.cursomc.domain.Categoria;
 import life.senna11.cursomc.domain.Cliente;
+import life.senna11.cursomc.dto.CategoriaDTO;
 import life.senna11.cursomc.dto.ClienteDTO;
+import life.senna11.cursomc.dto.ClienteNewDTO;
 import life.senna11.cursomc.services.ClienteService;
 
 @RestController
@@ -62,6 +67,14 @@ public class ClienteResource {
 		Page<Cliente> list = service.findPage(page, linePerPage, orderBy, direction);
 		Page<ClienteDTO> listDto = list.map(obj -> new ClienteDTO(obj));
 		return ResponseEntity.ok().body(listDto);
-	}		
+	}	
+	
+	@RequestMapping(method=RequestMethod.POST)
+	public ResponseEntity<Void> insert(@Valid @RequestBody ClienteNewDTO objDto){
+		Cliente obj = service.fromDTO(objDto);
+		obj = service.insert(obj);
+		URI uri = ServletUriComponentsBuilder.fromCurrentRequest().path("/{id}").buildAndExpand(obj.getId()).toUri();
+		return ResponseEntity.created(uri).build();
+	}
 
 }
