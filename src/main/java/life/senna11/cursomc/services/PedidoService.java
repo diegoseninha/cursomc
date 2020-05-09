@@ -11,11 +11,9 @@ import life.senna11.cursomc.domain.ItemPedido;
 import life.senna11.cursomc.domain.PagamentoComBoleto;
 import life.senna11.cursomc.domain.Pedido;
 import life.senna11.cursomc.domain.enums.EstadoPagamento;
-import life.senna11.cursomc.repositories.ClienteRepository;
 import life.senna11.cursomc.repositories.ItemPedidoRepository;
 import life.senna11.cursomc.repositories.PagamentoRepository;
 import life.senna11.cursomc.repositories.PedidoRepository;
-import life.senna11.cursomc.repositories.ProdutoRepository;
 
 @Service
 public class PedidoService {
@@ -37,6 +35,9 @@ public class PedidoService {
 	
 	@Autowired
 	private ClienteService clienteService;
+	
+	@Autowired 
+	private EmailService emailService;
 	
 	public Pedido find(Integer id){
 		Optional<Pedido> obj = repo.findById(id);
@@ -66,7 +67,8 @@ public class PedidoService {
 			ip.setPedido(obj);
 		}
 		itemPedidoRepository.saveAll(obj.getItens());
-		System.out.println(obj);
+		emailService.sendOrderConfirmationEmail(obj);
+		// System.out.println(obj);
 		return obj;
 	}
 
